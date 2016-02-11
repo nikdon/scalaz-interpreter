@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/nikdon/scalaz-interpreter.svg?branch=master)](https://travis-ci.org/nikdon/scalaz-interpreter)

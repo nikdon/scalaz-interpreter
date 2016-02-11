@@ -4,7 +4,7 @@
 
 Interpreter implementation based on **scalaz** inspired by Rúnar Bjarnason [Compositional Application Architecture With Reasonably Priced Monads](https://www.parleys.com/play/53a7d2c3e4b0543940d9e538/).
 
-Refer that current version of **scalaz** 7.2.0 doesn't prevent stackoverflow. See (issue)[https://github.com/scalaz/scalaz/pull/1079]
+Refer that current version of **scalaz** 7.2.0 doesn't prevent stackoverflow. See [PR](https://github.com/scalaz/scalaz/pull/1079)
 
 See tests for usage example:
 

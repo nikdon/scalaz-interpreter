@@ -72,4 +72,3 @@ class ImplicitsTest extends FlatSpec with Matchers {
     prg.foldMap(chEngJpInterpreter)
   }
 }
-

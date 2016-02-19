@@ -7,4 +7,9 @@ jdk:
   - oraclejdk7
   - openjdk6
 
-script: sbt ++$TRAVIS_SCALA_VERSION test
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION test
+  - sbt clean coverage test
+
+after_success:
+  - pip install --user codecov && codecov

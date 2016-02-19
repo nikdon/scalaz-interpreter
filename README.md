@@ -1,6 +1,8 @@
 # scalaz-interperter
 
 [![Build Status](https://travis-ci.org/nikdon/scalaz-interpreter.svg?branch=master)](https://travis-ci.org/nikdon/scalaz-interpreter)
+[![](https://jitpack.io/v/nikdon/scalaz-interpreter.svg)](https://jitpack.io/#nikdon/scalaz-interpreter)
+[![codecov.io](https://codecov.io/github/nikdon/scalaz-interpreter/coverage.svg?branch=master)](https://codecov.io/github/nikdon/scalaz-interpreter?branch=master)
 
 Interpreter implementation based on [**scalaz**](https://github.com/scalaz/scalaz) and [**cats**](https://github.com/typelevel/cats) inspired by Rúnar Bjarnason [Compositional Application Architecture With Reasonably Priced Monads](https://www.parleys.com/play/53a7d2c3e4b0543940d9e538/).
 
@@ -37,4 +39,12 @@ class ImplicitsTest extends FlatSpec with Matchers {
     prg.foldMap(chEngJpInterpreter)
   }
 }
+```
+
+## Getting Started
+
+```scala
+resolvers += "jitpack" at "https://jitpack.io"
+
+libraryDependencies += "com.github.nikdon" % "scalaz-interpreter" % "2e3e3cb6c9"
 ```

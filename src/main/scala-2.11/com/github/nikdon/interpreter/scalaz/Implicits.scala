@@ -1,4 +1,4 @@
-package com.github.nikdon.interpreter
+package com.github.nikdon.interpreter.scalaz
 
 import scala.language.higherKinds
 import scalaz._

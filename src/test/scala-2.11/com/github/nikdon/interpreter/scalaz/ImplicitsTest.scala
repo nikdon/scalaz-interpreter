@@ -48,7 +48,7 @@ object ChineseInterpreter extends (ChineseSyntax ~> Id) {
 
 class ImplicitsTest extends FlatSpec with Matchers {
 
-  "Implicit conversions" should "be used in the building of a programs" in {
+  "scalaz implicit conversions" should "be used in the building of a programs" in {
 
     import Implicits._
 

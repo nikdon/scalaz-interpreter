@@ -9,7 +9,9 @@ jdk:
 
 script:
   - sbt ++$TRAVIS_SCALA_VERSION test
-  - sbt clean coverage test
+
+before_install:
+  - pip install --user codecov
 
 after_success:
-  - pip install --user codecov && codecov
+  - codecov

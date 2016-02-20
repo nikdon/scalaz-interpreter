@@ -56,7 +56,7 @@ class ImplicitsTest extends FlatSpec with Matchers {
     def program[F[_]](implicit
                       T1: Inject[EnglishSyntax, F],
                       T2: Inject[JapaneseSyntax, F],
-                      T3: Inject[CatsChineseSyntax, F]) = for {
+                      T3: Inject[CatsChineseSyntax, F]): Free[F, Unit] = for {
       _ ← English.Say("The one says: 'Hi!'")
       _ ← Japanese.Say("Another one says: 'こんにちは'!")
       _ ← Chinese.Say("And somebody says: '嗨!'")

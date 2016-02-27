@@ -46,5 +46,5 @@ class ImplicitsTest extends FlatSpec with Matchers {
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
 
-libraryDependencies += "com.github.nikdon" % "scalaz-interpreter" % "2e3e3cb6c9"
+libraryDependencies += "com.github.nikdon" % "scalaz-interpreter" % "ee990c3e2a"
 ```

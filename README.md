@@ -6,8 +6,6 @@
 
 Interpreter implementation based on [**scalaz**](https://github.com/scalaz/scalaz) and [**cats**](https://github.com/typelevel/cats) inspired by Rúnar Bjarnason [Compositional Application Architecture With Reasonably Priced Monads](https://www.parleys.com/play/53a7d2c3e4b0543940d9e538/).
 
-Note that current stable version of **scalaz** 7.2.0 doesn't prevent stack overflow. For more information on this look at the [PR](https://github.com/scalaz/scalaz/pull/1079).
-
 Code based on **scalaz** and **cats** is almost the same except dependencies. Full examples are in tests.
 
 Programs for interpretation in general look like this one:
@@ -39,6 +37,16 @@ class ImplicitsTest extends FlatSpec with Matchers {
     prg.foldMap(chEngJpInterpreter)
   }
 }
+```
+
+Another way to create an interpreter is to use `HList` from [**shapeless**](https://github.com/milessabin/shapeless):
+
+```scala
+val interpreter: App1 ~> Id = Fold(
+      (ChineseInterpreter: ChineseSyntax ~> Id) ::
+      (EnglishInterpreter: EnglishSyntax ~> Id) ::
+      (JapaneseInterpreter: JapaneseSyntax ~> Id) :: HNil
+    )
 ```
 
 ## Getting Started

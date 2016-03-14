@@ -1,10 +1,12 @@
 package com.github.nikdon.interpreter.scalaz
 
+import com.github.nikdon.interpreter.Fold
 import org.scalatest.{FlatSpec, Matchers}
+import shapeless.HNil
 
 import scala.language.higherKinds
-import scalaz.Scalaz._
-import scalaz._
+import scalaz.Id.Id
+import scalaz.{Coproduct, Free, Inject, ~>}
 
 
 sealed trait EnglishSyntax[A]
@@ -65,9 +67,14 @@ class ImplicitsTest extends FlatSpec with Matchers {
     type App1[A] = Coproduct[ChineseSyntax, App, A]
     val prg: Free[App1, Unit] = program[App1]
 
-    val engJpInterpreter: App ~> Id = EnglishInterpreter or JapaneseInterpreter
-    val chEngJpInterpreter: App1 ~> Id = ChineseInterpreter or engJpInterpreter
 
-    prg.foldMap(chEngJpInterpreter)
+
+    val interpreter: App1 ~> Id = Fold(
+      (ChineseInterpreter: ChineseSyntax ~> Id) ::
+      (EnglishInterpreter: EnglishSyntax ~> Id) ::
+      (JapaneseInterpreter: JapaneseSyntax ~> Id) :: HNil
+    )
+
+    prg.foldMap(interpreter)
   }
 }

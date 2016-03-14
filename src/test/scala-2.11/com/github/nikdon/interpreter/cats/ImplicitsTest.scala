@@ -3,7 +3,9 @@ package com.github.nikdon.interpreter.cats
 import cats.data.Coproduct
 import cats.free.{Free, Inject}
 import cats.{Id, ~>}
+import com.github.nikdon.interpreter.Fold
 import org.scalatest.{FlatSpec, Matchers}
+import shapeless.HNil
 
 import scala.language.higherKinds
 
@@ -34,14 +36,14 @@ object JapaneseInterpreter extends (JapaneseSyntax ~> Id) {
 }
 
 
-sealed trait CatsChineseSyntax[A]
+sealed trait ChineseSyntax[A]
 object Chinese {
-  case class Say(str: String) extends CatsChineseSyntax[Unit]
+  case class Say(str: String) extends ChineseSyntax[Unit]
 }
 
-object ChineseInterpreter extends (CatsChineseSyntax ~> Id) {
+object ChineseInterpreter extends (ChineseSyntax ~> Id) {
   import Chinese._
-  def apply[A](fa: CatsChineseSyntax[A]): Id[A] = fa match {
+  def apply[A](fa: ChineseSyntax[A]): Id[A] = fa match {
     case Say(str) ⇒ println(str)
   }
 }
@@ -56,19 +58,22 @@ class ImplicitsTest extends FlatSpec with Matchers {
     def program[F[_]](implicit
                       T1: Inject[EnglishSyntax, F],
                       T2: Inject[JapaneseSyntax, F],
-                      T3: Inject[CatsChineseSyntax, F]): Free[F, Unit] = for {
+                      T3: Inject[ChineseSyntax, F]): Free[F, Unit] = for {
       _ ← English.Say("The one says: 'Hi!'")
       _ ← Japanese.Say("Another one says: 'こんにちは'!")
       _ ← Chinese.Say("And somebody says: '嗨!'")
     } yield ()
 
     type App[A] = Coproduct[EnglishSyntax, JapaneseSyntax, A]
-    type App1[A] = Coproduct[CatsChineseSyntax, App, A]
+    type App1[A] = Coproduct[ChineseSyntax, App, A]
     val prg: Free[App1, Unit] = program[App1]
 
-    val engJpInterpreter: App ~> Id = EnglishInterpreter or JapaneseInterpreter
-    val chEngJpInterpreter: App1 ~> Id = ChineseInterpreter or engJpInterpreter
+    val interpreter: App1 ~> Id = Fold(
+      (ChineseInterpreter: ChineseSyntax ~> Id) ::
+      (EnglishInterpreter: EnglishSyntax ~> Id) ::
+      (JapaneseInterpreter: JapaneseSyntax ~> Id) :: HNil
+    )
 
-    prg.foldMap(chEngJpInterpreter)
+    prg.foldMap(interpreter)
   }
 }

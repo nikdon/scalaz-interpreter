@@ -49,29 +49,43 @@ object ChineseInterpreter extends (ChineseSyntax ~> Id) {
 
 class ImplicitsTest extends FlatSpec with Matchers {
 
-  "scalaz implicit conversions" should "be used in the building of a programs" in {
+  import Implicits._
 
-    import Implicits._
+  def program[F[_]](implicit
+                    T1: Inject[EnglishSyntax, F],
+                    T2: Inject[JapaneseSyntax, F],
+                    T3: Inject[ChineseSyntax, F]) = for {
+    _ ← English.Say("The one says: 'Hi!'")
+    _ ← Japanese.Say("Another one says: 'こんにちは'!")
+    _ ← Chinese.Say("And somebody says: '嗨!'")
+  } yield ()
 
-    def program[F[_]](implicit
-                      T1: Inject[EnglishSyntax, F],
-                      T2: Inject[JapaneseSyntax, F],
-                      T3: Inject[ChineseSyntax, F]) = for {
-      _ ← English.Say("The one says: 'Hi!'")
-      _ ← Japanese.Say("Another one says: 'こんにちは'!")
-      _ ← Chinese.Say("And somebody says: '嗨!'")
-    } yield ()
+  type App[A] = Coproduct[EnglishSyntax, JapaneseSyntax, A]
+  type App1[A] = Coproduct[ChineseSyntax, App, A]
+  val prg: Free[App1, Unit] = program[App1]
 
-    type App[A] = Coproduct[EnglishSyntax, JapaneseSyntax, A]
-    type App1[A] = Coproduct[ChineseSyntax, App, A]
-    val prg: Free[App1, Unit] = program[App1]
+  "Scalaz implicit conversions" should "be used in the building of a programs" in {
 
-//    import shapeless.HNil
-//    val interpreter1: App1 ~> Id = Fold(
-//      (ChineseInterpreter: ChineseSyntax ~> Id) ::
-//      (EnglishInterpreter: EnglishSyntax ~> Id) ::
-//      (JapaneseInterpreter: JapaneseSyntax ~> Id) :: HNil
-//    )
+    val engJpInterpreter: App ~> Id = EnglishInterpreter or JapaneseInterpreter
+    val chEngJpInterpreter: App1 ~> Id = ChineseInterpreter or engJpInterpreter
+
+    prg.foldMapRec(chEngJpInterpreter)
+  }
+
+  it should "be used in the building of programs with HList" in {
+
+    import shapeless.HNil
+
+    val interpreter: App1 ~> Id = Fold(
+      (ChineseInterpreter: ChineseSyntax ~> Id) ::
+        (EnglishInterpreter: EnglishSyntax ~> Id) ::
+        (JapaneseInterpreter: JapaneseSyntax ~> Id) :: HNil
+    )
+
+    prg.foldMapRec(interpreter)
+  }
+
+  it should "be used in the building of programs with shapeless conversions" in {
 
     val interpreter: App1 ~> Id = Fold.tupleN(
       ChineseInterpreter: ChineseSyntax ~> Id,

@@ -49,6 +49,16 @@ val interpreter: App1 ~> Id = Fold(
     )
 ```
 
+Or `Fold.tupleN()` function:
+
+```scala
+val interpreter: App1 ~> Id = Fold.tupleN(
+  ChineseInterpreter: ChineseSyntax ~> Id,
+  EnglishInterpreter: EnglishSyntax ~> Id,
+  JapaneseInterpreter: JapaneseSyntax ~> Id
+)
+```
+
 ## Getting Started
 
 ```scala

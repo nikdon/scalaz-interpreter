@@ -5,7 +5,6 @@ import cats.free.{Free, Inject}
 import cats.{Id, ~>}
 import com.github.nikdon.interpreter.Fold
 import org.scalatest.{FlatSpec, Matchers}
-import shapeless.HNil
 
 import scala.language.higherKinds
 
@@ -68,10 +67,17 @@ class ImplicitsTest extends FlatSpec with Matchers {
     type App1[A] = Coproduct[ChineseSyntax, App, A]
     val prg: Free[App1, Unit] = program[App1]
 
-    val interpreter: App1 ~> Id = Fold(
-      (ChineseInterpreter: ChineseSyntax ~> Id) ::
-      (EnglishInterpreter: EnglishSyntax ~> Id) ::
-      (JapaneseInterpreter: JapaneseSyntax ~> Id) :: HNil
+//    import shapeless.HNil
+//    val interpreter: App1 ~> Id = Fold(
+//      (ChineseInterpreter: ChineseSyntax ~> Id) ::
+//      (EnglishInterpreter: EnglishSyntax ~> Id) ::
+//      (JapaneseInterpreter: JapaneseSyntax ~> Id) :: HNil
+//    )
+
+    val interpreter: App1 ~> Id = Fold.tupleN(
+      ChineseInterpreter: ChineseSyntax ~> Id,
+      EnglishInterpreter: EnglishSyntax ~> Id,
+      JapaneseInterpreter: JapaneseSyntax ~> Id
     )
 
     prg.foldMap(interpreter)

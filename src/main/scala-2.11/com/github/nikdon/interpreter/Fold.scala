@@ -8,14 +8,14 @@ trait Interpreters[L <: HList] extends DepFn1[L]
 
 
 object Fold {
-  def apply[L <: HList](l: L)(implicit is: Interpreters[L]): Interpreters[L]#Out = is(l)
+  def apply[L <: HList](l: L)(implicit is: Interpreters[L]): is.Out = is(l)
 
   def tupleN[P <: Product, In <: HList, Out <: HList](p: P)
                                                      (implicit
                                                       gen: Generic.Aux[P, In],
                                                       ev: IsHlistOfH[In, Out],
                                                       is: Interpreters[Out],
-                                                      tupler: Tupler[Out]): Interpreters[Out]#Out =
+                                                      tupler: Tupler[Out]): is.Out =
     apply(ev.hsequence(gen.to(p)))
 }
 

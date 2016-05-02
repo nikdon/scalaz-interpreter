@@ -4,9 +4,9 @@ version := "1.0"
 scalaVersion := "2.11.8"
 
 libraryDependencies ++= {
-  val scalazV = "7.2.1"
+  val scalazV = "7.2.2"
   val scalaTestV = "2.2.5"
-  val catsV = "0.4.1"
+  val catsV = "0.5.0"
   val shapelessV = "2.3.0"
 
   Seq(

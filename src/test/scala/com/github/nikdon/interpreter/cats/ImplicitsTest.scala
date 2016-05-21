@@ -89,11 +89,11 @@ class ImplicitsTest extends FlatSpec with Matchers {
 
   it should "be used in the building of programs with shapeless conversions" in {
 
-    val interpreter: App1 ~> Id = Fold.tupleN(
+    val interpreter: App1 ~> Id = Fold.tupleN((
       ChineseInterpreter: ChineseSyntax ~> Id,
       EnglishInterpreter: EnglishSyntax ~> Id,
       JapaneseInterpreter: JapaneseSyntax ~> Id
-    )
+    ))
 
     prg.foldMap(interpreter)
   }

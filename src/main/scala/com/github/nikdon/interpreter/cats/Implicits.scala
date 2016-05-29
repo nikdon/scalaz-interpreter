@@ -31,6 +31,10 @@ object Implicits {
         }
     }
 
-  implicit def ImplicitInjectLift[F[_], G[_], A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] = Free liftF I.inj(fa)
+  implicit def injectLift[F[_], G[_], A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] = Free liftF I.inj(fa)
+
+  object lift {
+    implicit def lift[F[_], A](fa: F[A]): Free[F, A] = Free liftF fa
+  }
 
 }

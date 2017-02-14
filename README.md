@@ -66,3 +66,5 @@ resolvers += "jitpack" at "https://jitpack.io"
 
 libraryDependencies += "com.github.nikdon" % "scalaz-interpreter" % "10630f3ca8"
 ```
+
+[![Analytics](https://ga-beacon.appspot.com/UA-91956314-1/scalaz-interpreter/readme?pixel)](https://github.com/igrigorik/ga-beacon)
